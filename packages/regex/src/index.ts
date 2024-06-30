@@ -9,7 +9,3 @@ export function isEmailValid(email: string) {
 export function isPhoneNumberValid(phoneNumber: string) {
    return phoneRegex.test(phoneNumber)
 }
-
-export function isIranianPhoneNumberValid(phoneNumber: string) {
-   return iranianPhoneRegex.test(phoneNumber)
-}

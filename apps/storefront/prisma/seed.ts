@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+const { PrismaClient } = require('@prisma/client')
 
 function getRandomFloat(min, max, precision) {
    if (min >= max || precision < 0) {

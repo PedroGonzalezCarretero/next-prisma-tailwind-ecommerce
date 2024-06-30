@@ -1,14 +1,17 @@
-import { ModalProvider } from '@/providers/modal-provider'
-import { ThemeProvider } from '@/providers/theme-provider'
-import { ToastProvider } from '@/providers/toast-provider'
-import { Inter } from 'next/font/google'
+import { ModalProvider } from '@/providers/modal-provider';
+import { ThemeProvider } from '@/providers/theme-provider';
+import { ToastProvider } from '@/providers/toast-provider';
+import { Inter } from 'next/font/google';
 
-import './globals.css'
+
+
+import './globals.css';
+
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-   title: 'Store',
+   title: 'Innovate Store',
    description: 'E-Commerce Store',
    keywords: ['E-Commerce', 'Store', 'Shop'],
    authors: [

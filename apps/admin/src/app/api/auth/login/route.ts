@@ -1,36 +1,19 @@
-import config from '@/config/site'
-import Mail from '@/emails/verify'
 import prisma from '@/lib/prisma'
-import { generateSerial } from '@/lib/serial'
 import { getErrorResponse } from '@/lib/utils'
-import { sendMail } from '@persepolis/mail'
 import { isEmailValid } from '@persepolis/regex'
-import { render } from '@react-email/render'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 
 export async function POST(req: NextRequest) {
    try {
-      const OTP = generateSerial({})
-
-      const { email } = await req.json()
+      const { email, password } = await req.json()
 
       if (isEmailValid(email)) {
-         const user = await prisma.owner.update({
+         const user = await prisma.owner.findUnique({
             where: { email },
-            data: {
-               OTP,
-            },
          })
-         console.log(user) 
-
-
-         await sendMail({
-            name: config.name,
-            to: email,
-            subject: 'Verify your email.',
-            html: render(Mail({ code: OTP, name: config.name })),
-         })
+         console.log(user)
+         console.log({ email, password })
 
          return new NextResponse(
             JSON.stringify({

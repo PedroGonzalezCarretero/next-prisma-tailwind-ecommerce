@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn, isVariableValid } from '@/lib/utils'
-import { isEmailValid, isIranianPhoneNumberValid } from '@persepolis/regex'
+import { isEmailValid } from '@persepolis/regex'
 import { Loader, MailIcon, SmartphoneIcon } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import * as React from 'react'
@@ -17,18 +17,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
    return (
       <div className={cn('grid gap-6', className)} {...props}>
-         {fetchedOTP ? (
-            <VerifyComponents
-               isLoading={isLoading}
-               setIsLoading={setIsLoading}
-            />
-         ) : (
-            <TryComponents
-               isLoading={isLoading}
-               setIsLoading={setIsLoading}
-               setFetchedOTP={setFetchedOTP}
-            />
-         )}
          <div className="relative">
             <div className="absolute inset-0 flex items-center">
                <span className="w-full border-t" />
@@ -92,6 +80,7 @@ function TryComponents({ isLoading, setIsLoading, setFetchedOTP }) {
    const searchParams = useSearchParams()
    const method = searchParams.get('method')
    const email = searchParams.get('email')
+   const password = searchParams.get('password')
    const phone = searchParams.get('phone')
 
    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,6 +146,25 @@ function TryComponents({ isLoading, setIsLoading, setFetchedOTP }) {
          console.error({ error })
       }
    }
+   async function onSubmitCredentials() {
+      try {
+         setIsLoading(true)
+
+         const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ email, password }),
+            cache: 'no-store',
+         })
+
+         if (response.ok) {
+            setFetchedOTP(true)
+         }
+
+         setIsLoading(false)
+      } catch (error) {
+         console.error({ error })
+      }
+   }
 
    if (method === 'phone')
       return (
@@ -179,16 +187,13 @@ function TryComponents({ isLoading, setIsLoading, setFetchedOTP }) {
                   onChange={handlePhoneChange}
                   required
                />
-               {isVariableValid(phone) && !isIranianPhoneNumberValid(phone) && (
+               {isVariableValid(phone) && (
                   <p className="mt-2 text-sm text-red-700">
                      Phone Number is not valid.
                   </p>
                )}
             </div>
-            <Button
-               onClick={onSubmitPhone}
-               disabled={isLoading || !isIranianPhoneNumberValid(phone)}
-            >
+            <Button onClick={onSubmitPhone} disabled={isLoading}>
                {isLoading && <Loader className="mr-2 h-4 animate-spin" />}
                Login with Phone
             </Button>

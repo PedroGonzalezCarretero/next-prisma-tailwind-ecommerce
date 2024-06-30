@@ -1,7 +1,9 @@
-import { UserAuthForm } from '@/app/login/components/user-auth-form'
-import config from '@/config/site'
-import { Metadata } from 'next'
+import { UserAuthForm } from '@/app/login/components/user-auth-form';
+import config from '@/config/site';
+import { Metadata } from 'next';
 import Link from 'next/link'
+
+import { LoginForm } from './components/login-form'
 
 export const metadata: Metadata = {
    title: 'Authentication',
@@ -52,7 +54,10 @@ export default function AuthenticationPage() {
                      Enter your email below to create or login your account.
                   </p>
                </div>
-               <UserAuthForm />
+               {/* <UserAuthForm /> */}
+
+               <LoginForm />
+
                <p className="px-8 text-center text-sm text-muted-foreground">
                   By clicking continue, you agree to our{' '}
                   <Link
